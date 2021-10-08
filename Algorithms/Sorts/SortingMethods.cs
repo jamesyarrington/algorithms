@@ -36,6 +36,48 @@ namespace Sorts
             return aListOnTheInside.QuickSort().ToArray();
         }
 
+        public static void MergeSort(this List<int> data)
+        {
+            var length = data.Count;
+            if (length < 2)
+                return;
+
+            var center = length / 2;
+            var list1 = data.GetRange(0, center);
+            var list2 = data.GetRange(center, length - center);
+            list1.MergeSort();
+            list2.MergeSort();
+            data = Merge(list1, list2);
+        }
+
+        private static List<int> Merge(List<int> list1, List<int> list2)
+        {
+            var merged = new List<int>(list1.Count + list2.Count);
+            while(list1.Count + list2.Count > 0)
+            {
+                if (list1.Count < 1)
+                {
+                    merged.AddRange(list2);
+                    return merged;
+                } 
+                if (list2.Count < 1)
+                {
+                    merged.AddRange(list1);
+                    return merged;
+                }
+                if (list1[0] < list2[0])
+                {
+                    merged.Add(list1[0]);
+                    list1.RemoveAt(0);
+                } else
+                {
+                    merged.Add(list2[0]);
+                    list2.RemoveAt(0);
+                }
+            }
+            return merged;
+        }
+
         public static void QuickSortInPlace(this int[] data, int start = 0, int end = 0)
         {
             if (end == 0)
